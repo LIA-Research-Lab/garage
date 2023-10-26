@@ -100,9 +100,8 @@ class GaussianMLPPolicy(GaussianMLPModel, Policy):
                                  env_spec.action_space))
 
         self._env_spec = env_spec
-        self._obs_dim = env_spec.observation_space.flat_dim
-        self._action_dim = env_spec.action_space.flat_dim
-
+        self._obs_dim = np.prod(env_spec.observation_space.shape)
+        self._action_dim = np.prod(env_spec.action_space.shape)
         self._hidden_sizes = hidden_sizes
         self._hidden_nonlinearity = hidden_nonlinearity
         self._hidden_w_init = hidden_w_init

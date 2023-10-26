@@ -134,22 +134,19 @@ class GymEnv(Environment):
         self._env = None
         if isinstance(env, str):
             self._env = gym.make(env)
-        elif isinstance(env, gym.Env):
+        else: #if isinstance(env, gym.Env):
             self._env = env
-        else:
-            raise ValueError('GymEnv can take env as either a string, '
-                             'or an Gym environment, but got type {} '
-                             'instead.'.format(type(env)))
 
         self._max_episode_length = _get_time_limit(self._env,
                                                    max_episode_length)
 
-        self._render_modes = self._env.metadata['render.modes']
+        self._render_modes = None # self._env.metadata['render.modes']
 
         self._step_cnt = None
         self._visualize = False
 
-        self._action_space = akro.from_gym(self._env.action_space)
+        self._action_space = akro.Box(self._env.action_space.low, self._env.action_space.high)
+
         self._observation_space = akro.from_gym(self._env.observation_space,
                                                 is_image=is_image)
         self._spec = EnvSpec(action_space=self.action_space,
@@ -217,7 +214,9 @@ class GymEnv(Environment):
         if self._step_cnt is None:
             raise RuntimeError('reset() must be called before step()!')
 
-        observation, reward, done, info = self._env.step(action)
+        observation, reward, term, trunc, info = self._env.step(action)
+
+        done = term or trunc
 
         if self._visualize:
             self._env.render(mode='human')

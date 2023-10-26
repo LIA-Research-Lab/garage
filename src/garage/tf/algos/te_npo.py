@@ -817,7 +817,7 @@ class TENPO(RLAlgorithm):
                                   episodes.lengths, self.max_episode_length)
         baselines_list = []
         for baseline, valid in zip(baselines, valids):
-            baselines_list.append(baseline[valid.astype(np.bool)])
+            baselines_list.append(baseline[valid.astype(np.bool_)])
 
         # Augment reward from baselines
         rewards_tensor = self._f_rewards(*policy_opt_input_values)
@@ -839,12 +839,12 @@ class TENPO(RLAlgorithm):
                                                     returns_tensor, valids,
                                                     tasks, latents,
                                                     observations):
-            returns = ret[val.astype(np.bool)]
-            task = task[val.astype(np.bool)]
-            latent = latent[val.astype(np.bool)]
-            obs = obs[val.astype(np.bool)]
+            returns = ret[val.astype(np.bool_)]
+            task = task[val.astype(np.bool_)]
+            latent = latent[val.astype(np.bool_)]
+            obs = obs[val.astype(np.bool_)]
 
-            aug_rewards.append(rew[val.astype(np.bool)])
+            aug_rewards.append(rew[val.astype(np.bool_)])
             aug_returns.append(returns)
             fit_paths.append(
                 dict(observations=obs,

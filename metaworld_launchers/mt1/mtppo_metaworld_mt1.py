@@ -10,7 +10,7 @@ from garage.envs import normalize
 from garage.envs.multi_env_wrapper import MultiEnvWrapper, round_robin_strategy
 from garage.experiment import MetaWorldTaskSampler
 from garage.experiment.deterministic import set_seed
-from garage.sampler import RaySampler
+from garage.sampler import RaySampler, LocalSampler
 from garage.tf.algos import PPO
 from garage.tf.policies import GaussianMLPPolicy
 from garage.tf.baselines import GaussianMLPBaseline
@@ -42,7 +42,7 @@ def mtppo_metaworld_mt1(ctxt, seed, entropy, env_name):
     train_task_sampler = MetaWorldTaskSampler(mt1,
                                               'train',
                                               lambda env, _: normalize(env),
-                                              add_env_onehot=True)
+                                              add_env_onehot=False)
     assert n_tasks % 10 == 0
     assert n_tasks <= 500
     envs = [env_up() for env_up in train_task_sampler.sample(n_tasks)]
@@ -92,7 +92,7 @@ def mtppo_metaworld_mt1(ctxt, seed, entropy, env_name):
                 use_softplus_entropy=False,
                 sampler=sampler,
                 use_neg_logli_entropy=True,
-                multitask=True
+                multitask=False
             )
 
         trainer.setup(algo, envs)

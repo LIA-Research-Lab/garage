@@ -92,6 +92,7 @@ class DefaultWorker(Worker):
         """Begin a new episode."""
         self._eps_length = 0
         self._prev_obs, episode_info = self.env.reset()
+        self._prev_obs = self._prev_obs[0]
         for k, v in episode_info.items():
             self._episode_infos[k].append(v)
 
@@ -107,6 +108,7 @@ class DefaultWorker(Worker):
         """
         if self._eps_length < self._max_episode_length:
             a, agent_info = self.agent.get_action(self._prev_obs)
+            print(a)
             es = self.env.step(a)
             self._observations.append(self._prev_obs)
             self._env_steps.append(es)

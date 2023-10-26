@@ -42,11 +42,11 @@ class NormalizedEnv(Wrapper):
         self._scale_reward = scale_reward
         self._normalize_obs = normalize_obs
         self._normalize_reward = normalize_reward
-        self._expected_action_scale = expected_action_scale
+        self._expected_action_scale = [1., 1., 1., 1.]
         self._flatten_obs = flatten_obs
 
         self._obs_alpha = obs_alpha
-        flat_obs_dim = self._env.observation_space.flat_dim
+        flat_obs_dim = np.prod(self._env.observation_space.shape)
         self._obs_mean = np.zeros(flat_obs_dim)
         self._obs_var = np.ones(flat_obs_dim)
 
@@ -89,7 +89,7 @@ class NormalizedEnv(Wrapper):
         """
         if isinstance(self.action_space, akro.Box):
             # rescale the action when the bounds are not inf
-            lb, ub = self.action_space.low, self.action_space.high
+            lb, ub = np.asarray([-1., -1., -1., -1]), np.asarray([1., 1., 1., 1.]) # self.action_space.low, self.action_space.high
             if np.all(lb != -np.inf) and np.all(ub != -np.inf):
                 scaled_action = lb + (action + self._expected_action_scale) * (
                     0.5 * (ub - lb) / self._expected_action_scale)

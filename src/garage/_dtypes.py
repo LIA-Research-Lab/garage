@@ -1049,12 +1049,6 @@ def check_timestep_batch(batch, array_type, ignored_fields=()):
                     # warnings.warn(
                     #     f'Observation {value[0]!r} is outside '
                     #     f'observation_space {env_spec.observation_space}')
-            if env_spec and field == 'actions':
-                if not _space_soft_contains(env_spec.action_space, value[0]):
-                    raise ValueError(
-                        f'Each {field[:-1]} has shape {value[0].shape} '
-                        f'but must match the action_space '
-                        f'{env_spec.action_space}')
             if field in ['rewards', 'step_types']:
                 if value.shape != (inferred_batch_size, ):
                     raise ValueError(f'{field} has shape {value.shape} '

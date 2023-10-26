@@ -120,7 +120,7 @@ class GaussianMLPBaseline(GaussianMLPBaselineModel, Baseline):
             self._optimizer = make_optimizer(optimizer, **optimizer_args)
 
         super().__init__(name=name,
-                         input_shape=(env_spec.observation_space.flat_dim *
+                         input_shape=(np.prod(env_spec.observation_space.shape) *
                                       num_seq_inputs, ),
                          output_dim=1,
                          hidden_sizes=hidden_sizes,
@@ -259,7 +259,7 @@ class GaussianMLPBaseline(GaussianMLPBaselineModel, Baseline):
         """
         new_baseline = GaussianMLPBaselineModel(
             name=name,
-            input_shape=(self._env_spec.observation_space.flat_dim *
+            input_shape=(np.prod(self._env_spec.observation_space.shape) *
                          self._num_seq_inputs, ),
             output_dim=1,
             hidden_sizes=self._hidden_sizes,
